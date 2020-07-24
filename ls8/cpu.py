@@ -6,8 +6,7 @@ LDI = 0b10000010
 PRN = 0b01000111
 HLT = 0b00000001
 POP = 0b01000110
-PUSH= 0b01000101
- 
+PUSH= 0b01000101 
 CALL = 0b01010000
 RET = 0b00010001
 CMP = 0b10100111
@@ -67,6 +66,9 @@ class CPU:
 
     def alu(self, op, reg_a, reg_b):
         """ALU operations(Arithmetic logic unit). MUL is the responsiblity of the ALU,`MUL registerA registerB` Multiply the values in two registers together and store the result in registerA."""
+        """The flags register `FL` holds the current flags status. These flags can change based on the operands given to the `CMP` opcode. The register is made up of 8 bits. If a particular bit is set, that flag is "true"."""
+        """ `CMP registerA registerB`.Compare the values in two registers. If they are equal, set the Equal `E` flag to 1, otherwise set it to 0. If registerA is less than registerB, set the Less-than `L` flag to 1, otherwise set it to 0. If registerA is greater than gisterB, set the Greater-than `G` flag  to 1, otherwise set it to 0. """
+        
         if op == "ADD":
             self.register[reg_a] += self.register[reg_b]
          
