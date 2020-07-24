@@ -7,7 +7,7 @@ PRN = 0b01000111
 HLT = 0b00000001
 POP = 0b01000110
 PUSH= 0b01000101
-# MUL = 0b10100010 
+ 
 CALL = 0b01010000
 RET = 0b00010001
 CMP = 0b10100111
@@ -27,8 +27,7 @@ class CPU:
         self.branch= {
             HLT: self.hlt,
             LDI: self.ldi,
-            PRN: self.prn,
-            # MUL: self.mul,
+            PRN: self.prn,            
             PUSH: self.push,
             POP: self.pop,
             CALL: self.call,
@@ -145,7 +144,7 @@ class CPU:
         self.pc += 2
 
     def call(self, operand_a, operand_b):
-        """CALL register,calls a subroutine (function) at the address stored in the register. 1. The address of the ***instruction*** _directly after_ `CALL` is  pushed onto the stack. This allows us to return to where we left off when the subroutine finishes executing. 2. The PC is set to the address stored in the given register. We jump to that location in RAM and execute the first instruction in the subroutine. The PC can move forward or backwards from its current location."""
+        """CALL register,calls a subroutine (function) at the address stored in the register. 1. The address of the instruction _directly after_ `CALL` is  pushed onto the stack. This allows us to return to where we left off when the subroutine finishes executing. 2. The PC is set to the address stored in the given register. We jump to that location in RAM and execute the first instruction in the subroutine. The PC can move forward or backwards from its current location."""
 
         value = self.pc + 2  # Get address of the next instruction   
          
@@ -156,7 +155,7 @@ class CPU:
 
     def ret(self, operand_a, operand_b):
         """ Get return address from the top of the stack ,pop value from top of the stack and store it in the PC.""" 
-        
+
         return_addr = self.register[self.sp]   
         self.pc = self.ram_read(return_addr)
         self.register[self.sp] += 1    
@@ -166,24 +165,23 @@ class CPU:
         self.pc += 3
 
     def jeq(self, operand_a, operand_b):
+        """If `equal` flag is set (true), jump to the address stored in the given register. """
         if self.flag == 0b00000001:
-            # if self.flag == [1]:
+            #self.flag == [1]
             self.pc = self.register[operand_a]
         else:
             self.pc += 2
 
     def jne(self, operand_a, operand_b):
-
-        # if flag is false
-        if self.flag != 0b00000001:
-            # self.pc = self.register[self.ram[self.pc + 1]]
-
+        """`JNE register` if `E` flag is clear (false, 0), jump to the address stored in the given register."""
+        
+        if self.flag != 0b00000001:            
             self.pc = self.register[operand_a]
-
         else:
             self.pc += 2
 
     def jmp(self, operand_a, operand_b):
+        """`JMP register`Jump to the address stored in the given register.Set the `PC` to the address stored in the given register."""
 
         self.pc = self.register[operand_a]
         print(f'pc instruction stored in {self.pc}')
